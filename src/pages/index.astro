@@ -1,12 +1,50 @@
 ---
 // src/pages/index.astro
+import Layout from "../layouts/Layout.astro";
+import FAQ from "../components/FAQ.tsx";
+import SignupSection from "../components/SignupSection.tsx";
+
 const site = "https://dearreels.com";
-const title = "dearreels.com";
-const description = "<fill in: 1-2 sentence value prop for SEO description>";
+const title = "Dearreels — Stay close to the people you love";
+const description =
+  "A weekly WhatsApp service that captures your parents' stories — in their voice, their language, their time — and turns a year of conversations into a private family archive.";
+
+const prompts = [
+  "What do you remember about your wedding day? Not the ceremony — the small things. What did you eat? What were you thinking?",
+  "Tell us about your mother. What was she like? What is something she said that you still remember?",
+  "What's a place from your childhood that doesn't exist anymore?",
+  "If you could send one message to your grandchildren, what would it be?",
+  "What song takes you back somewhere, the moment you hear it?",
+];
+
+const steps = [
+  {
+    n: "01",
+    title: "Tell us about your parent",
+    body: "Their name, the language they're most at home in, the things they love to talk about. Five minutes, once.",
+  },
+  {
+    n: "02",
+    title: "We send a prompt each week",
+    body: "On WhatsApp, on a quiet morning. They reply when they like, with a voice note, a video, a photo, or a few sentences.",
+  },
+  {
+    n: "03",
+    title: "A year, gathered with care",
+    body: "At year-end, your family receives a private digital archive and a hand-bound printed transcript — every voice, every story, kept.",
+  },
+];
+
+const planIncludes = [
+  "A thoughtful weekly prompt, sent on WhatsApp",
+  "Replies in voice, video, photo or text — in any language",
+  "A private year-end digital archive, searchable and shareable",
+  "A hand-bound printed transcript book, shipped at year-end",
+  "Real humans curating the prompts — not a chatbot",
+];
 ---
-<!doctype html>
-<html lang="en">
-  <head>
+<Layout>
+  <Fragment slot="head">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
@@ -17,18 +55,20 @@ const description = "<fill in: 1-2 sentence value prop for SEO description>";
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta
+      property="og:description"
+      content="Weekly prompts on WhatsApp. Voice and video replies. A beautiful private archive at the end of every year."
+    />
     <meta property="og:url" content={site} />
-    <meta property="og:site_name" content="dearreels.com" />
+    <meta property="og:site_name" content="Dearreels" />
 
     <!-- Twitter card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
 
-    <!-- JSON-LD structured data: Organization + WebSite (static; domain
-         is known at scaffold time. Update description by hand if needed.) -->
-    <script type="application/ld+json">
+    <!-- JSON-LD structured data -->
+    <script type="application/ld+json" is:inline>
 {
   "@context": "https://schema.org",
   "@graph": [
@@ -48,11 +88,233 @@ const description = "<fill in: 1-2 sentence value prop for SEO description>";
   ]
 }
     </script>
-  </head>
-  <body>
-    <main>
-      <h1>{title}</h1>
-      <p>Scaffolded via <code>portfolio new bootstrap</code>.</p>
-    </main>
-  </body>
-</html>
+  </Fragment>
+
+  <main class="min-h-screen bg-background text-foreground">
+    <!-- Header -->
+    <header class="mx-auto flex max-w-6xl items-center justify-between px-6 py-7">
+      <a href="#top" class="font-serif text-xl tracking-tight">Dearreals</a>
+      <nav class="hidden gap-8 text-sm text-muted-foreground md:flex">
+        <a href="#how" class="hover:text-foreground">How it works</a>
+        <a href="#prompts" class="hover:text-foreground">Sample prompts</a>
+        <a href="#pricing" class="hover:text-foreground">Pricing</a>
+        <a href="#faq" class="hover:text-foreground">Questions</a>
+      </nav>
+      <a
+        href="#signup"
+        class="hidden rounded-full bg-primary px-4 py-2 text-sm text-primary-foreground transition hover:opacity-90 md:inline-block"
+      >
+        Set this up
+      </a>
+    </header>
+
+    <!-- Hero -->
+    <section id="top" class="mx-auto max-w-6xl px-6 pt-10 pb-24 md:pt-16 md:pb-32">
+      <div class="grid items-center gap-12 md:grid-cols-2 md:gap-16">
+        <div class="max-w-xl">
+          <p class="mb-6 text-sm uppercase tracking-[0.18em] text-primary">
+            For families who live far apart
+          </p>
+          <h1 class="font-serif text-5xl leading-[1.05] tracking-tight text-foreground md:text-6xl lg:text-7xl">
+            Your mother has <em class="font-serif italic">stories</em> you haven't heard yet.
+          </h1>
+          <p class="mt-6 text-lg leading-relaxed text-muted-foreground md:text-xl">
+            Every week, we send your parent a thoughtful question on WhatsApp.
+            They reply in their own voice, their own language, their own time —
+            and a year later, you have a private family archive worth keeping.
+          </p>
+          <div class="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+            <a
+              href="#signup"
+              class="rounded-full bg-primary px-7 py-3.5 text-base text-primary-foreground transition hover:opacity-90"
+            >
+              Set this up for your family
+            </a>
+            <a
+              href="#how"
+              class="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+            >
+              See how it works
+            </a>
+          </div>
+        </div>
+        <div class="relative">
+          <div class="absolute -inset-3 -z-10 rounded-md bg-accent/40"></div>
+          <img
+            src="/hero-parent.jpg"
+            alt="A grandmother by a sunlit window, smiling on a phone call"
+            width="1024"
+            height="1024"
+            class="aspect-square w-full rounded-md object-cover shadow-sm"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Problem -->
+    <section class="border-y border-border/60 bg-card/40">
+      <div class="mx-auto max-w-3xl px-6 py-24 md:py-32">
+        <p class="font-serif text-2xl leading-relaxed text-foreground md:text-3xl md:leading-[1.45]">
+          You meant to call last Sunday. Then the week happened. Your father is
+          getting older in a house you haven't sat in for three years, and the
+          ten-minute calls you do manage are mostly about the weather. You love
+          him. You just can't seem to bridge the distance with logistics alone.
+        </p>
+        <p class="mt-8 text-base leading-relaxed text-muted-foreground md:text-lg">
+          So we built something quieter. Not another app for him to learn. Not
+          another reminder for you to feel guilty about. Just a small, weekly
+          rhythm that gives him a reason to tell you something — and gives you
+          something to keep.
+        </p>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section id="how" class="mx-auto max-w-6xl px-6 py-24 md:py-32">
+      <div class="max-w-2xl">
+        <p class="mb-4 text-sm uppercase tracking-[0.18em] text-primary">
+          How it works
+        </p>
+        <h2 class="font-serif text-4xl leading-tight md:text-5xl">
+          Three small steps, then we get out of the way.
+        </h2>
+      </div>
+      <div class="mt-16 grid gap-12 md:grid-cols-3 md:gap-10">
+        {steps.map((s) => (
+          <div>
+            <div class="font-serif text-3xl italic text-primary/70">{s.n}</div>
+            <h3 class="mt-4 font-serif text-2xl">{s.title}</h3>
+            <p class="mt-3 leading-relaxed text-muted-foreground">{s.body}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Why WhatsApp -->
+    <section class="border-y border-border/60 bg-card/40">
+      <div class="mx-auto grid max-w-5xl gap-12 px-6 py-24 md:grid-cols-5 md:gap-16 md:py-28">
+        <div class="md:col-span-2">
+          <p class="mb-4 text-sm uppercase tracking-[0.18em] text-primary">
+            Why WhatsApp
+          </p>
+          <h2 class="font-serif text-3xl leading-tight md:text-4xl">
+            Because your parent already knows how to use it.
+          </h2>
+        </div>
+        <div class="space-y-5 text-base leading-relaxed text-muted-foreground md:col-span-3 md:text-lg">
+          <p>
+            There's nothing to install. No login to remember. No new icon on a
+            home screen they didn't ask for.
+          </p>
+          <p>
+            A prompt arrives in the same chat where their friends and family
+            already write to them. They reply in their own language — typed,
+            spoken, or in pictures — whenever the moment feels right. Some
+            mornings it's a sentence. Some mornings it's twenty minutes of a
+            story you've never heard.
+          </p>
+          <p>
+            That's the whole interface. We thought it should be that simple.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sample prompts -->
+    <section id="prompts" class="mx-auto max-w-5xl px-6 py-24 md:py-32">
+      <div class="max-w-2xl">
+        <p class="mb-4 text-sm uppercase tracking-[0.18em] text-primary">
+          A few of the prompts
+        </p>
+        <h2 class="font-serif text-4xl leading-tight md:text-5xl">
+          The kind of questions you'd ask if you had the time.
+        </h2>
+        <p class="mt-5 leading-relaxed text-muted-foreground">
+          Every prompt is written by a person, not pulled from a template. They're
+          specific enough to invite a real answer, gentle enough not to ask too much.
+        </p>
+      </div>
+
+      <div class="mt-14 space-y-5">
+        {prompts.map((p) => (
+          <figure class="border-l-2 border-primary/60 bg-card/60 px-7 py-6 md:px-10 md:py-7">
+            <blockquote class="font-serif text-xl leading-relaxed text-foreground md:text-2xl md:leading-[1.5]">
+              <span class="mr-1 text-primary/70">“</span>{p}<span class="ml-0.5 text-primary/70">”</span>
+            </blockquote>
+          </figure>
+        ))}
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="border-y border-border/60 bg-card/40">
+      <div class="mx-auto max-w-5xl px-6 py-24 md:py-32">
+        <div class="grid items-start gap-12 md:grid-cols-5 md:gap-16">
+          <div class="md:col-span-2">
+            <img
+              src="/archive-still.jpg"
+              alt="A bound book and handwritten letters on a wooden table"
+              width="1024"
+              height="1024"
+              loading="lazy"
+              class="aspect-[4/5] w-full rounded-md object-cover shadow-sm"
+            />
+          </div>
+          <div class="md:col-span-3">
+            <p class="mb-4 text-sm uppercase tracking-[0.18em] text-primary">
+              One simple plan
+            </p>
+            <h2 class="font-serif text-4xl leading-tight md:text-5xl">
+              $149 a year, for the whole family.
+            </h2>
+            <p class="mt-5 leading-relaxed text-muted-foreground">
+              One price. No upsells. Everything below is included for one parent
+              and as many family members as you want to share the archive with.
+            </p>
+
+            <ul class="mt-10 space-y-4 text-base text-foreground">
+              {planIncludes.map((item) => (
+                <li class="flex gap-3">
+                  <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-primary"></span>
+                  <span class="leading-relaxed">{item}</span>
+                </li>
+              ))}
+            </ul>
+
+            <a
+              href="#signup"
+              class="mt-10 inline-block rounded-full bg-primary px-7 py-3.5 text-base text-primary-foreground transition hover:opacity-90"
+            >
+              Set this up
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ (interactive island) -->
+    <FAQ client:visible />
+
+    <!-- Signup (interactive island) -->
+    <SignupSection client:visible />
+
+    <!-- Footer -->
+    <footer class="border-t border-border/60">
+      <div class="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 px-6 py-12 md:flex-row md:items-center">
+        <div>
+          <p class="font-serif text-lg">Dearreals</p>
+          <p class="mt-1 text-sm text-muted-foreground">
+            Made by a small team, for families who live too far apart.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-6 text-sm text-muted-foreground">
+          <a href="#" class="hover:text-foreground">Privacy</a>
+          <a href="#" class="hover:text-foreground">Terms</a>
+          <a href="mailto:hello@example.com" class="hover:text-foreground">
+            hello@example.com
+          </a>
+        </div>
+      </div>
+    </footer>
+  </main>
+</Layout>

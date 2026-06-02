@@ -1,0 +1,16 @@
+---
+// src/layouts/Layout.astro
+// Shared chrome: the <html> shell, global stylesheet, and a `head` slot so
+// each page owns its own SEO/meta tags (kept in the page source for the
+// SEO regression test).
+import "../styles/global.css";
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
