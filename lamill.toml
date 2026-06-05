@@ -16,8 +16,7 @@ framework = "astro"
 
 # Tracked todos for dearreels.com. status: "done" | "open".
 [[todo]]
-status = "open"
-priority = "high"
+status = "done"
 task = "Fill in [content] block (site_type, primary_keyword, icp, …)"
 
 [[todo]]
@@ -39,11 +38,17 @@ task = "Confirm GSC verification + sitemap submitted (re-run deploy if it timed 
 # Declarative content identity for this site.
 # Authored by the human; consumed by rankmill to generate drafts and run audits.
 # Leave fields empty until you have a deliberate answer. Empty is better than wrong.
-site_type = ""            # e.g. "legal-compliance", "tool", "directory", "blog", "b2c"
-primary_keyword = ""      # the one phrase this site should rank for
-secondary_keywords = []   # 3-8 supporting phrases
-icp = ""                  # ideal customer profile — one sentence, specific role + context
-urgency_trigger = ""      # what makes the reader act now (deadline, penalty, pain)
-penalty = ""              # cost of inaction, in their terms (dollars, risk, time)
-tone = ""                 # e.g. "direct, technical, no fluff" or "warm, plainspoken"
+site_type = "b2c"
+primary_keyword = "questions to ask my mother"
+secondary_keywords = [
+    "ways to stay close to parents far away",
+    "how to feel closer to parents far away",
+    "long distance grandparenting",
+    "Mother's Day gifts that mean something",
+    "milestone birthday gifts for Indian father turning 70",
+]
+icp = "The primary buyer is the eldest adult daughter in an NRI (non-resident Indian) family, aged 32-48, with stable household income above $80K (or local equivalent), one or two young children of her own, and parents aged 65+ still living in India. She speaks to her mother weekly but the calls have flattened into logistics — health updates, weather, what was cooked. She wants something deeper but doesn't know how to engineer it without it feeling forced. She has 2-3 siblings scattered across countries. She is the one who organizes family things, sends the birthday flowers, manages the WhatsApp group, and carries the quiet guilt of being far away. She does not search for \"memoir services\" — she searches for \"questions to ask my mother,\" \"how to feel closer to parents far away,\" and \"Mother's Day gifts that mean something.\" She buys for her mother but the product secretly serves her too."
+urgency_trigger = "Parents are aging and distance is widening — take small, regular actions now to keep the relationship close."
+penalty = "Relationships drift into logistical, surface-level interactions; you lose ongoing closeness, small moments, and face growing guilt and emotional distance."
+tone = "restrained, literary, essayistic"
 law = ""                  # statute or regulation if applicable, else empty
