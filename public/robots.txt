@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://dearreels.com/sitemap.xml
+Sitemap: https://dearreels.com/sitemap-index.xml
