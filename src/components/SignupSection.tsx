@@ -27,19 +27,45 @@ function Field({
   );
 }
 
+// Web3Forms access key (public by design). Set PUBLIC_WEB3FORMS_KEY in the
+// Cloudflare env; Astro inlines it at build. Unset → submit shows an error
+// rather than a fake "received". Same pattern as mspproof.com's LeadForm.
+const WEB3FORMS_ACCESS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY as string | undefined;
+
 export default function SignupSection() {
-  const [state, setState] = useState<"idle" | "submitting" | "done">("idle");
+  const [state, setState] = useState<"idle" | "submitting" | "done" | "error">("idle");
+  const [error, setError] = useState("");
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!WEB3FORMS_ACCESS_KEY) {
+      setState("error");
+      setError("Sign-ups aren't open just yet. Please write to hello@lamill.io instead.");
+      return;
+    }
+    const formData = new FormData(e.currentTarget);
+    formData.append("access_key", WEB3FORMS_ACCESS_KEY);
+    formData.append("subject", "New Dearreels sign-up");
+    formData.append("from_name", "Dearreels sign-up form");
+
     setState("submitting");
-    const data = Object.fromEntries(new FormData(e.currentTarget));
+    setError("");
     try {
-      const existing = JSON.parse(localStorage.getItem("leads") || "[]");
-      existing.push({ ...data, at: new Date().toISOString() });
-      localStorage.setItem("leads", JSON.stringify(existing));
-    } catch {}
-    setState("done");
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.success) {
+        setState("done");
+      } else {
+        setState("error");
+        setError(data.message || "Something went wrong. Please try again.");
+      }
+    } catch {
+      setState("error");
+      setError("Network error. Please try again in a moment.");
+    }
   }
 
   return (
@@ -66,6 +92,8 @@ export default function SignupSection() {
           </div>
         ) : (
           <form onSubmit={onSubmit} className="mt-12 space-y-6">
+            {/* honeypot */}
+            <input type="checkbox" name="botcheck" className="hidden" tabIndex={-1} autoComplete="off" />
             <Field label="Your name" name="name" required />
             <Field label="Your email" name="email" type="email" required />
             <div>
@@ -87,6 +115,11 @@ export default function SignupSection() {
             >
               {state === "submitting" ? "Sending…" : "Send"}
             </button>
+            {state === "error" && (
+              <p role="alert" className="text-sm text-destructive">
+                {error}
+              </p>
+            )}
           </form>
         )}
       </div>

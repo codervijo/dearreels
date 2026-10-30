@@ -48,6 +48,8 @@ describe('built site (dist/)', () => {
       '/questions/to-ask-aging-parents/',
       '/guides/storyworth-alternative/',
       '/essays/staying-close-to-parents-far-away/',
+      '/privacy/',
+      '/terms/',
     ]) {
       expect(paths).toContain(p);
     }
@@ -74,10 +76,20 @@ describe('built site (dist/)', () => {
         expect(attr(html, /<link rel="canonical" href="([^"]*)"/)).toBe(`${site}${path}`);
       });
 
-      it('is indexable and listed in the sitemap', () => {
-        expect(attr(html, /<meta name="robots" content="([^"]*)"/)).toMatch(/^index/);
-        expect(locs).toContain(`${site}${path}`);
-      });
+      // [VERIFY] gate (sibling-site convention): a page with unresolved operator
+      // markers must be noindex AND out of the sitemap; every other page must be
+      // indexable AND in the sitemap.
+      if (html.includes('[VERIFY]')) {
+        it('has [VERIFY] markers → noindex and not in the sitemap', () => {
+          expect(attr(html, /<meta name="robots" content="([^"]*)"/)).toBe('noindex');
+          expect(locs).not.toContain(`${site}${path}`);
+        });
+      } else {
+        it('is indexable and listed in the sitemap', () => {
+          expect(attr(html, /<meta name="robots" content="([^"]*)"/)).toMatch(/^index/);
+          expect(locs).toContain(`${site}${path}`);
+        });
+      }
 
       it('has og:image and exactly one <h1>', () => {
         expect(html).toMatch(/property="og:image"/);

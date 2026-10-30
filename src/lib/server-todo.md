@@ -40,3 +40,10 @@ adapter, or moved to an external service.
 `src/components/SignupSection.tsx`. There was never a server endpoint for
 leads, so nothing was dropped there. To actually receive leads, wire the
 form `onSubmit` to a real endpoint/service.
+
+## Sign-up form
+
+Done 2026-10-30: `SignupSection` posts to Web3Forms (same pattern as
+mspproof.com), key from `PUBLIC_WEB3FORMS_KEY`. Unset key → visible error,
+never a fake "Thank you". Previously it only wrote to the visitor's
+localStorage. Regression test: `src/__tests__/signup-form.test.js`.

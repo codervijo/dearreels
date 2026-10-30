@@ -1,0 +1,126 @@
+---
+// src/pages/privacy.astro
+//
+// Privacy page (PRD v1.C). Every unmarked statement has a source:
+// - website facts from the code: SignupSection.tsx (fields; posts to
+//   Web3Forms), global.css (Google-hosted fonts), no analytics/cookies/storage
+//   anywhere in src/, Cloudflare Pages hosting;
+// - service facts only from what index.astro / FAQ.tsx already claim;
+// - contact address from the operator (hello@lamill.io).
+// Anything else is wording Claude proposed, shown inside a [VERIFY] marker for
+// the operator to accept, edit or delete. Update this page when any source
+// changes.
+//
+// While any marker remains, `verifyPending` stays true and /privacy/ stays in
+// astro.config.mjs's sitemap filter; clear all of them together.
+import ContentLayout from "../layouts/ContentLayout.astro";
+import Verify from "../components/Verify.astro";
+
+const path = "/privacy/";
+const title = "Privacy Policy";
+const description =
+  "What Dearreels collects through this website and the service, who processes it, and how to ask for a copy or deletion.";
+const effective = "October 30, 2026";
+const verifyPending = true;
+---
+<ContentLayout
+  title={title}
+  description={description}
+  path={path}
+  noindex={verifyPending}
+  breadcrumbs={[
+    { name: "Home", path: "/" },
+    { name: "Privacy", path },
+  ]}
+>
+  <article class="mx-auto max-w-3xl px-6 pt-10 pb-16">
+    <h1 class="font-serif text-4xl leading-[1.1] tracking-tight md:text-5xl">Privacy Policy</h1>
+    <p class="mt-4 text-sm text-muted-foreground">Effective {effective}</p>
+
+    <div class="prose-dr mt-10">
+      <p>
+        Dearreels is a <a href="https://lamill.io">lamill.io</a> project. This policy
+        covers the dearreels.com website and the Dearreels service. Questions go to
+        <a href="mailto:hello@lamill.io">hello@lamill.io</a>.
+      </p>
+      <p>
+        <Verify>Who is responsible for this data? No legal entity for lamill.io or Dearreels is recorded in any project repo; the only identity on record is "lamill.io" and hello@lamill.io. Name the company (or person) and its country.</Verify>
+      </p>
+
+      <h2>On this website</h2>
+      <p>
+        <strong>Reading pages.</strong> You can read every page without an account.
+        The site's code runs no analytics or advertising trackers, sets no
+        cookies, and stores nothing in your browser.
+      </p>
+      <p>
+        <strong>Hosting.</strong> The site is served by Cloudflare. Like any web
+        host, Cloudflare processes your IP address and request details to deliver
+        pages, under <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare's privacy policy</a>.
+      </p>
+      <p>
+        <strong>Fonts.</strong> Pages load the Fraunces and Inter typefaces from
+        Google Fonts, so your browser contacts Google's servers, which may log your
+        IP address. See <a href="https://policies.google.com/privacy">Google's privacy policy</a>.
+      </p>
+      <p>
+        <strong>The sign-up form.</strong> The form asks for your name, your email,
+        and, optionally, a few words about the parent you have in mind.
+        <strong>Web3Forms</strong> receives what you submit and forwards it to us by
+        email, under <a href="https://web3forms.com/privacy">Web3Forms' privacy policy</a>.
+        We use it to write back to you about setting up Dearreels.
+      </p>
+
+      <h2>When you use the service</h2>
+      <p>
+        Dearreels sends your parent one question a week on WhatsApp and gathers their
+        replies into a private archive for your family, with a printed transcript book
+        at year-end. To do that, the service handles:
+      </p>
+      <ul>
+        <li>Your name and email, and what you tell us about your parent: their name, the language they're most at home in, and what they love to talk about.</li>
+        <li>Your parent's WhatsApp number.</li>
+        <li>Your parent's replies: voice notes, videos, photos and text.</li>
+        <li>The family members you share the archive with, each through their own private link.</li>
+        <li>The delivery address for the printed transcript book.</li>
+        <li>Payment for the yearly plan.</li>
+      </ul>
+      <p>
+        Messages to and from your parent travel through WhatsApp, which Meta
+        operates under <a href="https://www.whatsapp.com/legal/privacy-policy">its own privacy policy</a>.
+      </p>
+      <p>
+        <Verify>Who processes service data? The service's back end isn't in the code yet: no WhatsApp Business API provider, archive storage, transcription service, payment provider or book printer/shipper is recorded anywhere. List each one, and the country where data is stored.</Verify>
+      </p>
+
+      <h2>Your parent's consent</h2>
+      <p>
+        <Verify>No consent or opt-out flow is described anywhere yet. Proposed wording: "We only send prompts to a parent who has agreed to receive them, and they can stop at any time by replying to say so." Confirm that matches how the service will work, or replace it.</Verify>
+      </p>
+
+      <h2>How we use it</h2>
+      <p>
+        <Verify>Proposed wording: "We use this information only to run the service: to send prompts, build and share the archive, print and ship the book, take payment, and reply to you. We do not sell it, use your family's replies for advertising, or use them to train AI models." Accept, edit or remove each commitment.</Verify>
+      </p>
+
+      <h2>Retention and deletion</h2>
+      <p>
+        <Verify>No retention period is recorded. Decide how long sign-up emails, replies and archives are kept, including after a subscription ends, and how deletion works.</Verify>
+      </p>
+
+      <h2>Your requests</h2>
+      <p>
+        To ask for a copy of your data, a correction, or deletion, whether for
+        you or for your parent, email <a href="mailto:hello@lamill.io">hello@lamill.io</a>.
+      </p>
+      <p>
+        <Verify>Decide whether to commit to a response time, and which regional privacy laws to name. The audience on record (AI_AGENTS.md) is in the US, UK, Canada, the Gulf, Australia and Singapore, with parents in India, but no legal review of which laws apply has been recorded.</Verify>
+      </p>
+
+      <h2>Changes</h2>
+      <p>
+        If this page changes, we'll update the effective date above.
+      </p>
+    </div>
+  </article>
+</ContentLayout>

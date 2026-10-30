@@ -62,7 +62,7 @@ commercial intent, not ours).
 | 7 | `/guides/storyworth-alternative` | Storyworth alternative | KD 4, CPC $2.38 = buyer intent; direct conversion page |
 | 8 | `/essays/staying-close-to-parents-far-away` | cornerstone | no search volume; sets the voice and is the internal-link anchor |
 
-Deferred to v1.C or later: gifts for aging parents (KD 31–42, harder; revisit
+Deferred to v1.D or later: gifts for aging parents (KD 31–42, harder; revisit
 once the domain has some authority), 70th-birthday-for-dad, long-distance
 grandparents, family history.
 

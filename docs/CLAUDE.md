@@ -58,6 +58,14 @@ uv run portfolio project seo dearreels.com
     page: title/description length, canonical = path, indexable + in
     sitemap, og:image, one `<h1>`, valid JSON-LD, and no broken internal
     links. Build before running it.
+  - `[VERIFY]` gate (same convention as mspproof.com): operator commitments
+    on a page are wrapped in `<Verify>` (`src/components/Verify.astro`). Any
+    page that renders a marker must pass `noindex` and be listed in
+    `verifyPending` in `astro.config.mjs` (the sitemap filter);
+    `site.test.js` fails otherwise. When a page's last marker is cleared,
+    set `verifyPending = false` in the page and remove its path from the config.
+    `/privacy/` and `/terms/` are gated this way, and their facts come from
+    the code (see each file's header comment).
   - Content honesty: never state facts about Dearreels beyond what the
     landing page/FAQ already claims, and never state competitor facts
     without a dated source (see the Storyworth guide's footnote).

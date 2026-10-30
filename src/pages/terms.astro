@@ -1,0 +1,113 @@
+---
+// src/pages/terms.astro
+//
+// Terms of service (PRD v1.C). Every unmarked statement has a source: the
+// service and plan facts come only from index.astro and FAQ.tsx ($149/year,
+// one parent + shared family links, weekly WhatsApp prompt, archive +
+// hand-bound printed transcript, no obligation to reply, 30-day full refund);
+// contact from the operator. Anything else is wording Claude proposed, shown
+// inside a [VERIFY] marker for the operator to accept, edit or delete.
+//
+// While any marker remains, `verifyPending` stays true and /terms/ stays in
+// astro.config.mjs's sitemap filter.
+import ContentLayout from "../layouts/ContentLayout.astro";
+import Verify from "../components/Verify.astro";
+
+const path = "/terms/";
+const title = "Terms of Service";
+const description =
+  "The terms for using dearreels.com and the Dearreels service: the plan, payment and refunds, your parent's consent, and who owns the replies.";
+const effective = "October 30, 2026";
+const verifyPending = true;
+---
+<ContentLayout
+  title={title}
+  description={description}
+  path={path}
+  noindex={verifyPending}
+  breadcrumbs={[
+    { name: "Home", path: "/" },
+    { name: "Terms", path },
+  ]}
+>
+  <article class="mx-auto max-w-3xl px-6 pt-10 pb-16">
+    <h1 class="font-serif text-4xl leading-[1.1] tracking-tight md:text-5xl">Terms of Service</h1>
+    <p class="mt-4 text-sm text-muted-foreground">Effective {effective}</p>
+
+    <div class="prose-dr mt-10">
+      <p>
+        These terms cover dearreels.com and the Dearreels service, a
+        <a href="https://lamill.io">lamill.io</a> project. Our
+        <a href="/privacy/">privacy policy</a> explains how we handle your family's
+        information.
+      </p>
+      <p>
+        <Verify>Who offers the service, and under which law? No legal entity, governing law or jurisdiction is recorded in any project repo. Name the company (or person), its country, and the governing law.</Verify>
+      </p>
+
+      <h2>The service</h2>
+      <p>
+        Dearreels sends your parent a thoughtful question each week on WhatsApp.
+        They can reply by voice note, video, photo or text, in any language. At the
+        end of the year, you receive a private digital archive of their replies and
+        a hand-bound printed transcript book, sent to the address of your choice.
+      </p>
+      <p>
+        There's no obligation to reply. Some weeks your parent may write a
+        paragraph, some weeks send a short voice note, and some weeks skip
+        entirely.
+      </p>
+
+      <h2>Plan, payment and refunds</h2>
+      <p>
+        The plan costs $149 a year and covers one parent, with as many family
+        members as you like sharing the archive. If it doesn't feel right in the
+        first 30 days, we'll refund you in full.
+      </p>
+      <p>
+        <Verify>Not recorded anywhere: the currency of "$149" and whether tax is included; whether the plan renews automatically (and any reminder before renewal); how to cancel; and what happens to the archive and book if you cancel after 30 days.</Verify>
+      </p>
+
+      <h2>Your parent's consent</h2>
+      <p>
+        <Verify>Proposed wording: "You must have your parent's agreement before signing them up. We confirm with them before the first prompt, and they can stop the prompts at any time; if they do, we'll let you know." No consent flow is recorded, so confirm or replace this.</Verify>
+      </p>
+
+      <h2>Who owns the replies</h2>
+      <p>
+        <Verify>Proposed wording: "Your parent's replies belong to them and your family. You give us permission to store, transcribe, arrange and print them only as needed to provide the service. We don't claim ownership of them, and we don't publish them." Accept, edit or remove.</Verify>
+      </p>
+
+      <h2>Acceptable use</h2>
+      <p>
+        <Verify>Proposed wording: "Please don't use the service to message someone who hasn't agreed to it, to send anything unlawful or abusive, or to interfere with the site or service." Accept, edit or remove.</Verify>
+      </p>
+
+      <h2>WhatsApp</h2>
+      <p>
+        Prompts and replies travel through WhatsApp, which Meta runs under its own
+        terms. Dearreels is not affiliated with WhatsApp or Meta.
+      </p>
+
+      <h2>The website's content</h2>
+      <p>
+        <Verify>Proposed wording: "The question lists, guides and essays on this site are free to read and use with your own family. Please don't republish them wholesale without asking." Accept, edit or remove.</Verify>
+      </p>
+
+      <h2>Liability</h2>
+      <p>
+        <Verify>No liability terms are recorded. Proposed wording: "The service is provided as is. To the extent the law allows, we aren't liable for indirect or consequential losses, and our total liability is limited to what you paid us in the previous twelve months." The twelve-month cap is a common pattern, not a decision anyone has made; set the actual terms, ideally with legal review.</Verify>
+      </p>
+
+      <h2>Changes</h2>
+      <p>
+        If this page changes, we'll update the effective date above.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        Questions about these terms: <a href="mailto:hello@lamill.io">hello@lamill.io</a>.
+      </p>
+    </div>
+  </article>
+</ContentLayout>

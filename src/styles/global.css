@@ -134,4 +134,14 @@
   .prose-dr th, .prose-dr td { border-bottom: 1px solid var(--color-border); padding: 0.6em 0.75em; text-align: left; vertical-align: top; }
   .prose-dr th { font-weight: 600; }
   .prose-dr .table-wrap { overflow-x: auto; }
+  /* [VERIFY] operator-sign-off markers — deliberately loud */
+  .verify {
+    display: inline-block;
+    border: 1px dashed var(--color-destructive);
+    border-radius: 0.375rem;
+    padding: 0.25em 0.6em;
+    font-size: 0.9rem;
+    color: var(--color-destructive);
+    background: color-mix(in oklch, var(--color-destructive) 6%, transparent);
+  }
 }
