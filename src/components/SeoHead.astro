@@ -1,0 +1,57 @@
+---
+// src/components/SeoHead.astro
+// Shared <head> SEO block for every page except index.astro (which keeps its
+// tags inline for the source-level regression test). Emits title, meta
+// description/robots, canonical, OG/Twitter, and a JSON-LD @graph.
+// `path` must carry a trailing slash to match @astrojs/sitemap <loc>s.
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  type?: "website" | "article";
+  jsonLd?: Record<string, unknown>[];
+  noindex?: boolean;
+}
+
+const { title, description, path, type = "website", jsonLd = [], noindex = false } = Astro.props;
+const site = "https://dearreels.com";
+const url = `${site}${path}`;
+const fullTitle = `${title} | Dearreels`;
+const ogImage = `${site}/hero-parent.jpg`;
+
+const graph = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${site}/#organization`,
+      name: "Dearreels",
+      url: `${site}/`,
+    },
+    ...jsonLd,
+  ],
+};
+---
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<meta name="robots" content={noindex ? "noindex" : "index, follow, max-image-preview:large"} />
+<link rel="canonical" href={url} />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+<meta property="og:type" content={type} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={url} />
+<meta property="og:site_name" content="Dearreels" />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1024" />
+<meta property="og:image:height" content="1024" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<script type="application/ld+json" set:html={JSON.stringify(graph)} />

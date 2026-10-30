@@ -4,10 +4,12 @@ import Layout from "../layouts/Layout.astro";
 import FAQ from "../components/FAQ.tsx";
 import SignupSection from "../components/SignupSection.tsx";
 
-const site = "https://dearreels.com";
+const site = "https://dearreels.com/";
 const title = "Dearreels — Stay close to the people you love";
 const description =
-  "A weekly WhatsApp service that captures your parents' stories — in their voice, their language, their time — and turns a year of conversations into a private family archive.";
+  "A weekly WhatsApp prompt for your parents. They reply in their own voice and language, and your family keeps a private archive of the year.";
+
+const ogImage = `${site}hero-parent.jpg`;
 
 const prompts = [
   "What do you remember about your wedding day? Not the ceremony — the small things. What did you eat? What were you thinking?",
@@ -49,6 +51,7 @@ const planIncludes = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href={site} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
@@ -61,11 +64,15 @@ const planIncludes = [
     />
     <meta property="og:url" content={site} />
     <meta property="og:site_name" content="Dearreels" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1024" />
+    <meta property="og:image:height" content="1024" />
 
     <!-- Twitter card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
 
     <!-- JSON-LD structured data -->
     <script type="application/ld+json" is:inline>
@@ -93,12 +100,13 @@ const planIncludes = [
   <main class="min-h-screen bg-background text-foreground">
     <!-- Header -->
     <header class="mx-auto flex max-w-6xl items-center justify-between px-6 py-7">
-      <a href="#top" class="font-serif text-xl tracking-tight">Dearreals</a>
+      <a href="#top" class="font-serif text-xl tracking-tight">Dearreels</a>
       <nav class="hidden gap-8 text-sm text-muted-foreground md:flex">
         <a href="#how" class="hover:text-foreground">How it works</a>
         <a href="#prompts" class="hover:text-foreground">Sample prompts</a>
         <a href="#pricing" class="hover:text-foreground">Pricing</a>
         <a href="#faq" class="hover:text-foreground">Questions</a>
+        <a href="/questions/" class="hover:text-foreground">Questions to ask</a>
       </nav>
       <a
         href="#signup"
@@ -302,16 +310,22 @@ const planIncludes = [
     <footer class="border-t border-border/60">
       <div class="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 px-6 py-12 md:flex-row md:items-center">
         <div>
-          <p class="font-serif text-lg">Dearreals</p>
+          <p class="font-serif text-lg">Dearreels</p>
           <p class="mt-1 text-sm text-muted-foreground">
             Made by a small team, for families who live too far apart.
           </p>
+          <p class="mt-1 text-sm text-muted-foreground">
+            A <a href="https://lamill.io" class="underline underline-offset-2 hover:text-foreground">lamill.io</a> project.
+          </p>
         </div>
         <div class="flex flex-wrap gap-6 text-sm text-muted-foreground">
+          <a href="/questions/" class="hover:text-foreground">Questions to ask</a>
+          <a href="/essays/staying-close-to-parents-far-away/" class="hover:text-foreground">Staying close</a>
+          <a href="/guides/storyworth-alternative/" class="hover:text-foreground">Storyworth alternative</a>
           <a href="#" class="hover:text-foreground">Privacy</a>
           <a href="#" class="hover:text-foreground">Terms</a>
-          <a href="mailto:hello@example.com" class="hover:text-foreground">
-            hello@example.com
+          <a href="mailto:hello@lamill.io" class="hover:text-foreground">
+            hello@lamill.io
           </a>
         </div>
       </div>

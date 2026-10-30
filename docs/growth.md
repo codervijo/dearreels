@@ -62,5 +62,23 @@ https://search.google.com/search-console directly.
 - **KPI:** any GSC traffic — clicks, impressions, indexed-page count
 - **Baseline:** 0 clicks / 0 impressions (just deployed)
 - **Action:** project scaffolded via `portfolio new bootstrap`; first deploy pending. After deploy: verify in GSC as `sc-domain:dearreels.com` and submit the sitemap.
-- **Result:** TBD — review 2026-06-29
+- **Result:** Reviewed late, on 2026-10-30. GSC over 28 days: 22 impressions, 1 click, 4.5% CTR, average position 5.4. Homepage indexed. Sitemap submitted, 1 URL. Source: `portfolio project seo`.
+- **Learning:** The site is indexed and gets a few impressions, but it's a single page, so there's no content surface to test the SEO thesis yet. Window extended; the test needs content pages first (see the 2026-10-30 entry).
+
+## 2026-10-30 — Technical-SEO hygiene (soft-404s, meta tags) removes crawl noise
+- **Status:** active
+- **Hypothesis:** Unknown URLs returned the homepage with HTTP 200 (`single-page-application` fallback). Fixing that and the incomplete meta tags (description over 160 chars, no `meta robots`, no `og:image`, canonical ≠ JSON-LD URL) avoids soft-404 / duplicate signals and improves link previews. On a 1-page site the traffic effect is expected to be ~nil; this is hygiene, not growth.
+- **KPI:** GSC Pages report shows no "Soft 404" entries; homepage still indexed; impressions not lower than baseline.
+- **Baseline:** 22 impressions / 1 click / 4.5% CTR / avg position 5.4 (28 days to 2026-10-30); 1 indexed URL.
+- **Action:** `v0.C`. `not_found_handling: "404-page"` plus a noindex `src/pages/404.astro`; head-tag fixes in `index.astro`; SEO regression tests. Built locally, not yet deployed.
+- **Result:** TBD — review 2026-11-27 (28 days after deploy; shift if deploy lands later)
+- **Learning:** TBD
+
+## 2026-10-30 — v1.B: first content surface (8 pages) earns impressions beyond the homepage
+- **Status:** active
+- **Hypothesis:** Low-difficulty informational "questions to ask your mom / dad / grandparents / parents / aging parents" pages (Serpstat KD 2–21), plus a Storyworth-alternative page (KD 4, buyer intent) and a cornerstone essay, will get indexed and earn impressions within one 28-day window. That is the first real test of the SEO thesis in the 2026-06-01 entry.
+- **KPI:** indexed URLs (target: all 8 new pages); GSC impressions on non-homepage URLs; queries containing "questions to ask"; any clicks to `/guides/storyworth-alternative/`.
+- **Baseline:** 1 indexed URL; 22 impressions / 1 click in 28 days, all on the homepage (2026-10-30).
+- **Action:** `v1.B`. Built 8 pages per `docs/seo-plan.md`, with internal links from the landing nav/footer. Not yet deployed. After deploy: submit the sitemap / ping IndexNow and request indexing of the hub in GSC.
+- **Result:** TBD — review 28 days after deploy
 - **Learning:** TBD

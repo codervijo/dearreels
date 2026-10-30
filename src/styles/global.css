@@ -105,3 +105,33 @@
     letter-spacing: -0.015em;
   }
 }
+
+/* Long-form content (v1 /questions/, /guides/, /essays/). Hand-rolled
+   instead of @tailwindcss/typography to keep the warm literary palette. */
+@layer components {
+  .prose-dr { font-size: 1.0625rem; line-height: 1.75; color: var(--color-foreground); }
+  .prose-dr > * + * { margin-top: 1.25em; }
+  .prose-dr h2 { font-size: 1.75rem; line-height: 1.25; margin-top: 2.5em; }
+  .prose-dr h3 { font-size: 1.3rem; line-height: 1.35; margin-top: 2em; }
+  .prose-dr h2 + *, .prose-dr h3 + * { margin-top: 0.75em; }
+  .prose-dr a { color: var(--color-primary); text-decoration: underline; text-underline-offset: 3px; }
+  .prose-dr a:hover { opacity: 0.8; }
+  .prose-dr ol { list-style: decimal; padding-left: 1.5em; }
+  .prose-dr ul { list-style: disc; padding-left: 1.5em; }
+  .prose-dr li + li { margin-top: 0.6em; }
+  .prose-dr li::marker { color: var(--color-muted-foreground); }
+  .prose-dr strong { font-weight: 600; }
+  .prose-dr em { font-style: italic; }
+  .prose-dr blockquote {
+    border-left: 2px solid var(--color-primary);
+    padding-left: 1.25em;
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    font-style: italic;
+  }
+  .prose-dr hr { border-top: 1px solid var(--color-border); margin: 2.5em 0; }
+  .prose-dr table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+  .prose-dr th, .prose-dr td { border-bottom: 1px solid var(--color-border); padding: 0.6em 0.75em; text-align: left; vertical-align: top; }
+  .prose-dr th { font-weight: 600; }
+  .prose-dr .table-wrap { overflow-x: auto; }
+}

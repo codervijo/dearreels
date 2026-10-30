@@ -1,0 +1,31 @@
+---
+// src/pages/404.astro
+// Served with HTTP 404 by Cloudflare (`not_found_handling: "404-page"` in
+// wrangler.jsonc) for any unknown path — prevents soft-404s.
+import Layout from "../layouts/Layout.astro";
+---
+<Layout>
+  <Fragment slot="head">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Page not found — Dearreels</title>
+    <meta name="robots" content="noindex" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </Fragment>
+
+  <main class="flex min-h-screen items-center justify-center bg-background px-6 text-foreground">
+    <div class="max-w-md text-center">
+      <p class="mb-4 text-sm uppercase tracking-[0.18em] text-primary">404</p>
+      <h1 class="font-serif text-4xl tracking-tight">This page isn't here.</h1>
+      <p class="mt-4 text-muted-foreground">
+        The link may be old, or the address mistyped.
+      </p>
+      <a
+        href="/"
+        class="mt-8 inline-block rounded-full bg-primary px-5 py-2.5 text-sm text-primary-foreground transition hover:opacity-90"
+      >
+        Back to Dearreels
+      </a>
+    </div>
+  </main>
+</Layout>

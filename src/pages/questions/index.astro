@@ -1,0 +1,82 @@
+---
+// src/pages/questions/index.astro
+// Hub for the /questions/ collection (v1.B). CollectionPage + ItemList JSON-LD.
+import { getCollection } from "astro:content";
+import ContentLayout from "../../layouts/ContentLayout.astro";
+
+const site = "https://dearreels.com";
+const path = "/questions/";
+const questions = (await getCollection("questions")).sort((a, b) => a.data.order - b.data.order);
+
+const title = "Questions to Ask Your Parents and Grandparents";
+const description =
+  "Thoughtful question lists for your mom, dad, grandparents and aging parents — to turn routine calls into real conversations, even from far away.";
+
+const collectionLd = {
+  "@type": "CollectionPage",
+  name: title,
+  description,
+  url: `${site}${path}`,
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: questions.map((q, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `${site}/questions/${q.id}/`,
+      name: q.data.h1,
+    })),
+  },
+};
+---
+<ContentLayout
+  title={title}
+  description={description}
+  path={path}
+  jsonLd={[collectionLd]}
+  breadcrumbs={[
+    { name: "Home", path: "/" },
+    { name: "Questions to ask", path },
+  ]}
+>
+  <section class="mx-auto max-w-3xl px-6 pt-10 pb-16">
+    <p class="text-sm uppercase tracking-[0.18em] text-primary">Questions to ask</p>
+    <h1 class="mt-4 font-serif text-4xl leading-[1.1] tracking-tight md:text-5xl">
+      Questions to ask the people who raised you
+    </h1>
+    <div class="prose-dr mt-8">
+      <p>
+        Most calls home follow the same groove: health, weather, what was cooked,
+        who is visiting. None of it is wrong. But the people on the other end of
+        those calls have lived whole lives you've only heard about in fragments,
+        and the right question can open a door that's been closed for decades.
+      </p>
+      <p>
+        These lists are written to be asked slowly — one at a time, across weeks,
+        not as an interview. Pick the one that fits the person, and start with a
+        single question.
+      </p>
+    </div>
+
+    <ul class="mt-12 grid gap-4">
+      {questions.map((q) => (
+        <li>
+          <a
+            href={`/questions/${q.id}/`}
+            class="block rounded-xl border border-border p-6 transition hover:bg-accent/30"
+          >
+            <span class="font-serif text-2xl tracking-tight">{q.data.h1}</span>
+            <span class="mt-2 block text-muted-foreground">{q.data.summary}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <div class="prose-dr mt-12">
+      <p>
+        If you live far away, read <a href="/essays/staying-close-to-parents-far-away/">
+        staying close to parents who live far away</a>. It's about why a question a
+        week works better than a long call once a month.
+      </p>
+    </div>
+  </section>
+</ContentLayout>

@@ -1,0 +1,98 @@
+---
+// src/pages/[hub]/[slug].astro
+// Renders every entry of the questions / guides / essays collections at
+// /<hub>/<slug>/. Article JSON-LD + breadcrumbs; related links within the hub.
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import ContentLayout from "../../layouts/ContentLayout.astro";
+
+type Hub = "questions" | "guides" | "essays";
+type Entry = CollectionEntry<Hub>;
+
+const hubLabels: Record<Hub, string> = {
+  questions: "Questions to ask",
+  guides: "Guides",
+  essays: "Essays",
+};
+
+export async function getStaticPaths() {
+  const hubs: Hub[] = ["questions", "guides", "essays"];
+  const paths = [];
+  for (const hub of hubs) {
+    const entries = await getCollection(hub);
+    for (const entry of entries) {
+      paths.push({ params: { hub, slug: entry.id }, props: { hub, entry, siblings: entries } });
+    }
+  }
+  return paths;
+}
+
+const { hub, entry, siblings } = Astro.props as { hub: Hub; entry: Entry; siblings: Entry[] };
+const { Content } = await render(entry);
+const d = entry.data;
+const path = `/${hub}/${entry.id}/`;
+const site = "https://dearreels.com";
+
+// Only /questions/ has a hub index today; guides/essays crumbs skip the hub.
+const breadcrumbs = [
+  { name: "Home", path: "/" },
+  ...(hub === "questions" ? [{ name: hubLabels[hub], path: "/questions/" }] : []),
+  { name: d.h1, path },
+];
+
+const article = {
+  "@type": "Article",
+  headline: d.h1,
+  description: d.description,
+  datePublished: d.published.toISOString().slice(0, 10),
+  dateModified: (d.updated ?? d.published).toISOString().slice(0, 10),
+  author: { "@id": `${site}/#organization` },
+  publisher: { "@id": `${site}/#organization` },
+  mainEntityOfPage: `${site}${path}`,
+  image: `${site}/hero-parent.jpg`,
+};
+
+const related = siblings
+  .filter((s) => s.id !== entry.id)
+  .sort((a, b) => a.data.order - b.data.order);
+const updated = (d.updated ?? d.published).toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+<ContentLayout
+  title={d.title}
+  description={d.description}
+  path={path}
+  type="article"
+  jsonLd={[article]}
+  breadcrumbs={breadcrumbs}
+>
+  <article class="mx-auto max-w-3xl px-6 pt-10 pb-16">
+    <p class="text-sm uppercase tracking-[0.18em] text-primary">{d.eyebrow}</p>
+    <h1 class="mt-4 font-serif text-4xl leading-[1.1] tracking-tight md:text-5xl">{d.h1}</h1>
+    <p class="mt-4 text-sm text-muted-foreground">Updated {updated}</p>
+    <div class="prose-dr mt-10">
+      <Content />
+    </div>
+  </article>
+
+  {related.length > 0 && (
+    <section class="mx-auto max-w-3xl px-6 pb-16">
+      <h2 class="font-serif text-2xl tracking-tight">More {hubLabels[hub].toLowerCase()}</h2>
+      <ul class="mt-6 grid gap-4 md:grid-cols-2">
+        {related.map((r) => (
+          <li>
+            <a
+              href={`/${hub}/${r.id}/`}
+              class="block h-full rounded-xl border border-border p-5 transition hover:bg-accent/30"
+            >
+              <span class="font-serif text-lg">{r.data.h1}</span>
+              <span class="mt-1 block text-sm text-muted-foreground">{r.data.summary}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+</ContentLayout>

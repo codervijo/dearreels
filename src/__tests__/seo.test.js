@@ -9,6 +9,7 @@ import { join } from 'node:path';
 const raw = readFileSync(join(process.cwd(), 'src', 'pages', 'index.astro'), 'utf8');
 // Strip frontmatter (between leading `---` markers) so we just check the HTML body.
 const html = raw.replace(/^---[\s\S]*?---\n/, '');
+const frontmatter = raw.match(/^---([\s\S]*?)---\n/)?.[1] ?? '';
 
 describe('SEO baseline (src/pages/index.astro)', () => {
   it('has a <title>', () => {
@@ -40,5 +41,37 @@ describe('SEO baseline (src/pages/index.astro)', () => {
     expect(html).toMatch(/application\/ld\+json/);
     expect(html).toMatch(/"@type":\s*"Organization"/);
     expect(html).toMatch(/"@type":\s*"WebSite"/);
+  });
+
+  it('meta description is ≤160 chars', () => {
+    const m = frontmatter.match(/const description =\s*"([^"]*)"/);
+    expect(m).not.toBeNull();
+    expect(m[1].length).toBeLessThanOrEqual(160);
+  });
+
+  it('has <meta name="robots">', () => {
+    expect(html).toMatch(/<meta\s+name="robots"/);
+  });
+
+  it('has og:image + twitter:image', () => {
+    expect(html).toMatch(/property="og:image"/);
+    expect(html).toMatch(/name="twitter:image"/);
+  });
+
+  it('canonical matches JSON-LD WebSite url (trailing slash)', () => {
+    expect(frontmatter).toMatch(/const site = "https:\/\/dearreels\.com\/"/);
+    expect(html).toMatch(/"url": "https:\/\/dearreels\.com\/"/);
+  });
+});
+
+describe('404 handling (no soft-404s)', () => {
+  it('wrangler serves 404.html with a 404 status, not the SPA fallback', () => {
+    const wrangler = readFileSync(join(process.cwd(), 'wrangler.jsonc'), 'utf8');
+    expect(wrangler).toMatch(/"not_found_handling":\s*"404-page"/);
+  });
+
+  it('404 page exists and is noindex', () => {
+    const page = readFileSync(join(process.cwd(), 'src', 'pages', '404.astro'), 'utf8');
+    expect(page).toMatch(/<meta\s+name="robots"\s+content="noindex"/);
   });
 });

@@ -1,0 +1,154 @@
+---
+// src/layouts/ContentLayout.astro
+// Chrome for the v1 content surface (/questions/, /guides/, /essays/):
+// SEO head, header, breadcrumbs (+ BreadcrumbList JSON-LD), product CTA,
+// and a footer that links every content page (internal-linking spine).
+import { getCollection } from "astro:content";
+import Layout from "./Layout.astro";
+import SeoHead from "../components/SeoHead.astro";
+
+interface Crumb {
+  name: string;
+  path: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  type?: "website" | "article";
+  jsonLd?: Record<string, unknown>[];
+  breadcrumbs: Crumb[];
+}
+
+const { title, description, path, type, jsonLd = [], breadcrumbs } = Astro.props;
+const site = "https://dearreels.com";
+
+const breadcrumbLd = {
+  "@type": "BreadcrumbList",
+  itemListElement: breadcrumbs.map((c, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: c.name,
+    item: `${site}${c.path}`,
+  })),
+};
+
+const byOrder = (a: { data: { order: number } }, b: { data: { order: number } }) =>
+  a.data.order - b.data.order;
+const questions = (await getCollection("questions")).sort(byOrder);
+const guides = (await getCollection("guides")).sort(byOrder);
+const essays = (await getCollection("essays")).sort(byOrder);
+---
+<Layout>
+  <Fragment slot="head">
+    <SeoHead
+      title={title}
+      description={description}
+      path={path}
+      type={type}
+      jsonLd={[...jsonLd, breadcrumbLd]}
+    />
+  </Fragment>
+
+  <div class="min-h-screen bg-background text-foreground">
+    <header class="mx-auto flex max-w-6xl items-center justify-between px-6 py-7">
+      <a href="/" class="font-serif text-xl tracking-tight">Dearreels</a>
+      <nav class="hidden gap-8 text-sm text-muted-foreground md:flex">
+        <a href="/questions/" class="hover:text-foreground">Questions to ask</a>
+        <a href="/essays/staying-close-to-parents-far-away/" class="hover:text-foreground">Staying close</a>
+        <a href="/#how" class="hover:text-foreground">How Dearreels works</a>
+      </nav>
+      <a
+        href="/#signup"
+        class="rounded-full bg-primary px-4 py-2 text-sm text-primary-foreground transition hover:opacity-90"
+      >
+        Set this up
+      </a>
+    </header>
+
+    <nav aria-label="Breadcrumb" class="mx-auto max-w-3xl px-6 pt-4">
+      <ol class="flex flex-wrap gap-2 text-sm text-muted-foreground">
+        {breadcrumbs.map((c, i) => (
+          <li class="flex gap-2">
+            {i < breadcrumbs.length - 1 ? (
+              <>
+                <a href={c.path} class="hover:text-foreground">{c.name}</a>
+                <span aria-hidden="true">/</span>
+              </>
+            ) : (
+              <span aria-current="page" class="text-foreground">{c.name}</span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <main>
+      <slot />
+    </main>
+
+    <aside class="mx-auto max-w-3xl px-6 pb-20">
+      <div class="rounded-2xl border border-border bg-accent/30 p-8 md:p-10">
+        <p class="text-sm uppercase tracking-[0.18em] text-primary">One question a week</p>
+        <h2 class="mt-3 font-serif text-3xl tracking-tight">Let the questions arrive on their own.</h2>
+        <p class="mt-4 text-muted-foreground">
+          Dearreels sends your parent one thoughtful question each week on WhatsApp.
+          They answer in their own voice and language, whenever they like. At the end
+          of the year, the whole family receives a private archive of every reply.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-4">
+          <a
+            href="/#signup"
+            class="rounded-full bg-primary px-5 py-2.5 text-sm text-primary-foreground transition hover:opacity-90"
+          >
+            Set this up for your family
+          </a>
+          <a href="/#how" class="rounded-full border border-border px-5 py-2.5 text-sm hover:bg-background">
+            See how it works
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <footer class="border-t border-border/60">
+      <div class="mx-auto grid max-w-6xl gap-10 px-6 py-12 md:grid-cols-4">
+        <div>
+          <a href="/" class="font-serif text-lg">Dearreels</a>
+          <p class="mt-1 text-sm text-muted-foreground">
+            Made by a small team, for families who live too far apart.
+          </p>
+          <p class="mt-3 text-sm text-muted-foreground">
+            A <a href="https://lamill.io" class="underline underline-offset-2 hover:text-foreground">lamill.io</a> project ·
+            <a href="mailto:hello@lamill.io" class="hover:text-foreground">hello@lamill.io</a>
+          </p>
+        </div>
+        <div>
+          <p class="text-sm font-medium">Questions to ask</p>
+          <ul class="mt-3 space-y-2 text-sm text-muted-foreground">
+            <li><a href="/questions/" class="hover:text-foreground">All question lists</a></li>
+            {questions.map((q) => (
+              <li><a href={`/questions/${q.id}/`} class="hover:text-foreground">{q.data.h1}</a></li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <p class="text-sm font-medium">Essays</p>
+          <ul class="mt-3 space-y-2 text-sm text-muted-foreground">
+            {essays.map((e) => (
+              <li><a href={`/essays/${e.id}/`} class="hover:text-foreground">{e.data.h1}</a></li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <p class="text-sm font-medium">Guides</p>
+          <ul class="mt-3 space-y-2 text-sm text-muted-foreground">
+            {guides.map((g) => (
+              <li><a href={`/guides/${g.id}/`} class="hover:text-foreground">{g.data.h1}</a></li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </div>
+</Layout>

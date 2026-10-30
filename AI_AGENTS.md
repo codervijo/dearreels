@@ -33,7 +33,15 @@ per-stack work to the central builder at `~/work/projects/builder/`.
 ## Project structure
 
 - `src/` — application source
-- `public/` — static assets copied to `dist/` at build (favicons, OG images, `_headers`)
+- `src/pages/` — `index.astro` (the landing page, owns its own SEO head), `404.astro` (noindex, served with HTTP 404), `questions/index.astro` (hub), `[hub]/[slug].astro` (renders every content entry)
+- `src/content/{questions,guides,essays}/` — v1 SEO content as markdown; schema in `src/content.config.ts`; plan in `docs/seo-plan.md`
+- `src/layouts/Layout.astro` — shared `<html>` shell with a `head` slot; `ContentLayout.astro` — chrome for content pages
+- `src/components/SeoHead.astro` — shared title/meta/canonical/OG/JSON-LD block
+- `src/components/` — React islands (`FAQ`, `SignupSection`, shadcn `ui/`)
+- `src/__tests__/` — vitest: smoke, `seo.test.js` (landing-page source + no-soft-404 config), `site.test.js` (built `dist/` SEO checks for every page)
+- `public/` — static assets copied to `dist/` at build (favicon, `hero-parent.jpg` = OG image, IndexNow key file, `_headers`, `robots.txt`)
+- `genai/` — original tanstack-start export, input to the `v15.M` lamill translate step (kept for reference)
+- `lamill.toml` — per-site config for lamill/rankmill: deploy platform, IndexNow, `[content]` identity, `[[todo]]`s
 - `docs/` — PRD, Prompts log
 - `Makefile` — thin forwarder to `../Makefile`
 - `wrangler.jsonc` — Cloudflare deploy config
@@ -67,18 +75,28 @@ This project's local `Makefile` forwards every target to `../Makefile` with
 
 ### Running Make targets from a Claude Code session
 
-The Bash tool runs on the host as `vijo`, not inside docker. To execute a
-target inside the container, find the running container and `docker exec` in:
+The Bash tool runs on the host as `vijo`, not inside docker. The host's Node
+is too old (v12) for Astro, so never build on the host. If a `sites1`
+container is running, `docker exec` into it:
 
 ```bash
 docker ps                                               # find the sites1 container name
 docker exec -w /usr/src/app <name> make test proj=dearreels.com
 ```
 
+If none is running, use a throwaway container from the `sites1` image
+(use `bash -c`, not `bash -lc` — a login shell drops volta's `PATH`):
+
+```bash
+cd ~/work/projects/sites
+docker run --rm -v "$PWD":/usr/src/app -w /usr/src/app/dearreels.com sites1 \
+  bash -c 'pnpm build && pnpm test'
+```
+
 ## Deployment info
 
-- **Platform:** Cloudflare Workers (Static Assets) — *not* Vercel.
-- **Config:** `wrangler.jsonc` at the repo root — points `assets.directory` at `./dist` and uses `not_found_handling: "single-page-application"` for SPA client-side routing.
+- **Platform:** Cloudflare Pages (`lamill.toml` `[deploy].platform = "cf-pages"`, production branch `main`) — *not* Vercel. `portfolio project check` can't confirm Pages vs Workers from live signals (CHECK_143 "deploy-drift: actual unknown").
+- **Config:** `wrangler.jsonc` at the repo root points `assets.directory` at `./dist` and sets `not_found_handling: "404-page"`. This is a static multi-page Astro site, **not an SPA**. Never set `"single-page-application"`: it serves the homepage with HTTP 200 for every unknown URL (soft-404s, plus a bogus `/sitemap.xml`). Both Pages and Workers serve `dist/404.html` with a real 404 status, so `src/pages/404.astro` is the fix on either platform.
 - **Headers:** `public/_headers` — cache (`/assets/*` immutable, HTML no-cache) + security headers (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`). Vite copies `public/` into `dist/` at build, so the file ships with the assets.
 - **Build:** `pnpm build` → `dist/`. Wrangler picks up `dist/` via `wrangler.jsonc`.
 - **Deploy:** `wrangler deploy` (locally) or via Cloudflare's Git integration on push.
@@ -87,8 +105,10 @@ docker exec -w /usr/src/app <name> make test proj=dearreels.com
   POSTs to the CF Pages API with `build_command="pnpm run build"` set explicitly
   (avoids the bun-detection trap kwizicle.com hit). Idempotent; safe to re-run.
 - **Vite version:** must be ≥ 6.0.0 — Wrangler's Vite integration rejects Vite 5.
-- **Env vars:** set `VITE_*` vars (e.g. `VITE_GA_ID`) in the Cloudflare Workers project's environment-variable settings — they're inlined at build time.
-- **Live URL:** https://dearreels.com/  *(update once first deploy succeeds)*
+- **Env vars:** Astro inlines `PUBLIC_*` vars at build time; set them in the Cloudflare project's environment-variable settings. No analytics are wired in yet: CHECK_080 fails, and the GA4 `[[todo]]` in `lamill.toml` is still open.
+- **Live URL:** https://dearreels.com/ (live, HTTP 200)
+- **Sitemap:** `@astrojs/sitemap` → `/sitemap-index.xml` → `/sitemap-0.xml`; `robots.txt` points at the index. `404.astro` is auto-excluded.
+- **IndexNow:** key file `public/ed7cb98a8ba79c6d774af281fa477193.txt`, enabled in `lamill.toml [index]`.
 - **Legacy:** if a `vercel.json` or `.vercelignore` is present from a Lovable export, it's inert on Cloudflare and safe to delete.
 
 ## Content strategy
@@ -99,10 +119,10 @@ Three concentric content layers. The outermost layer is programmatic SEO targeti
 
 ### Post-deploy checklist (do these once after the first successful deploy)
 
-- [ ] Verify in **Google Search Console** at https://search.google.com/search-console — add as `sc-domain:dearreels.com` property; verify via DNS TXT record. Until this is done, no SEO traffic data is observable for this site (and the workspace-wide `30 commercial sites with traffic` goal can't credit it).
-- [ ] Submit the sitemap (`https://dearreels.com/sitemap.xml`) inside GSC.
-- [ ] Update the **Live URL** above with the actual deploy URL.
-- [ ] Run `make run ARGS="cleanup"` from `sites/portfolio/` so `data/portfolio.json` reflects the new project's state (and `project status dearreels.com` resolves cleanly).
+- [x] Verify in **Google Search Console** at https://search.google.com/search-console — add as `sc-domain:dearreels.com` property; verify via DNS TXT record. Until this is done, no SEO traffic data is observable for this site (and the workspace-wide `30 commercial sites with traffic` goal can't credit it).
+- [x] Submit the sitemap inside GSC (`portfolio project seo` reports it submitted and reachable; the live sitemap is `https://dearreels.com/sitemap-index.xml`).
+- [x] Update the **Live URL** above with the actual deploy URL.
+- [x] `data/portfolio.json` knows the project (`uv run portfolio project check dearreels.com` resolves). `cleanup` has been replaced by `portfolio fleet sync`.
 
 ## How to run
 
@@ -125,11 +145,11 @@ exists — the per-project growth-experiment log; see Growth log section
 below), CHECK_001 (has-readme), CHECK_009 (has-gitignore), CHECK_035
 (vite-version-ok), CHECK_003 / CHECK_004 (AI_AGENTS.md `## Building info` +
 `## Deployment info` headings). See the full catalog with
-`portfolio check catalog`. The bootstrap output satisfies all of these on
-day zero — keep it that way.
+`portfolio check catalog`. Run it as `cd ../portfolio && uv run portfolio project check dearreels.com`;
+`uv run portfolio project seo dearreels.com` gives the GSC/indexing view.
 
-If `project check` flags a regression, fix it. v6.C's `portfolio project fix`
-will eventually auto-fix; until then, hand-edit.
+If `project check` flags a regression, fix it, either by hand or with
+`uv run portfolio project fix dearreels.com`.
 
 ## Growth log — per-project experiment tracker
 
@@ -152,9 +172,9 @@ before launch. Get a minimum-viable version live, indexed, then
 iterate on whichever sites actually attract traffic.
 
 Translation for this project: prefer shipping over perfection. The
-SEO baseline files (`public/robots.txt`, `public/sitemap.xml`),
-deploy config, and dev tooling (`vitest`) are pre-scaffolded so you
-can ship today.
+SEO baseline (`public/robots.txt`, `@astrojs/sitemap`, head tags guarded
+by `src/__tests__/seo.test.js`), deploy config, and dev tooling (`vitest`)
+are in place.
 
 ## Versioning
 
@@ -166,8 +186,10 @@ in `sites/portfolio/AI_AGENTS.md`):
 - **`vN.X`** — phase letter within a tier (A / B / C / …). Internal slicing of
   build work; signals "order/scope can shift." Each phase still ships
   independently.
-- **`vN.X.Y`** — numeric sub-phase for follow-up work that lands AFTER `vN.X`
-  shipped (e.g. polish, bug fixes, scope cuts).
+- **Two levels only — never `vN.X.Y`.** Follow-up work inside a tier takes the
+  next phase letter; renumber the table if a slot is needed mid-tier.
+- **`vN.A` is the planning / decisions-lock phase** of each tier; build work
+  starts at `vN.B`.
 
 Two-layer notation separates **external version** (what consumers see) from
 **internal phasing** (how the team slices work). Letters signal *un-promised* —
@@ -176,7 +198,7 @@ nobody mistakes `v1.B` for a SemVer minor release.
 **Always use this numbering when planning or shipping work on this project.**
 Specifically:
 
-- Every entry in `docs/prd.md`'s phases table uses `vN.X` (or `vN.X.Y`).
+- Every entry in `docs/prd.md`'s phases table uses `vN.X`.
 - Every commit message that ships a phase mentions its version (e.g.
   `v1.B — auth flow`).
 - Every entry in `docs/Prompts.md` references the version of the work it
