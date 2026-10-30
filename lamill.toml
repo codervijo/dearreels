@@ -11,6 +11,10 @@ custom_domains = [
     "dearreels.com",
 ]
 
+[index]
+indexnow_key = "ed7cb98a8ba79c6d774af281fa477193"
+indexnow_enabled = true
+
 [stack]
 framework = "astro"
 
