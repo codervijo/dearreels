@@ -33,3 +33,6 @@ to surface "last AI prompt" per project. Keep entries append-only.
 
 ## 2026-10-30 — v1.C privacy markers cleared
 > Operator accepted the use/no-sale wording. On retention: "we are not storing anything as of now". Corrected the wording to match what happens: there's no database, but Web3Forms emails each submission to hello@lamill.io; the operator accepted that. verifyPending false, /privacy/ indexable and back in the sitemap.
+
+## 2026-10-30 — v1.C deployed + IndexNow ping
+> Pushed `3ff0599`. Verified live: /terms/ 404, /privacy/ has the new wording, index/follow, in the sitemap. Pinged IndexNow for /privacy/ (the only new sitemap URL; accepted; ledger updated). Live form has an empty data-key: PUBLIC_WEB3FORMS_KEY still isn't set in Cloudflare Pages, so the sign-up and privacy forms error instead of submitting.
