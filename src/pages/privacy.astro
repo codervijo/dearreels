@@ -1,27 +1,29 @@
 ---
 // src/pages/privacy.astro
 //
-// Privacy page (PRD v1.C). Every unmarked statement has a source:
-// - website facts from the code: SignupSection.tsx (fields; posts to
-//   Web3Forms), global.css (Google-hosted fonts), no analytics/cookies/storage
-//   anywhere in src/, Cloudflare Pages hosting;
-// - service facts only from what index.astro / FAQ.tsx already claim;
-// - contact address from the operator (hello@lamill.io).
-// Anything else is wording Claude proposed, shown inside a [VERIFY] marker for
-// the operator to accept, edit or delete. Update this page when any source
-// changes.
+// Privacy page (PRD v1.C), following mspproof.com's pattern: it covers the
+// website only, because the Dearreels service is pre-launch. Every factual
+// statement is derived from the code: SignupSection.tsx (form fields; posts to
+// Web3Forms), the request form below, global.css (Google-hosted fonts), no
+// analytics/cookies/storage anywhere in src/, Cloudflare Pages hosting.
+// Update this page when any of those change, and expand it when the service
+// launches.
 //
-// While any marker remains, `verifyPending` stays true and /privacy/ stays in
-// astro.config.mjs's sitemap filter; clear all of them together.
+// Use/no-sale and retention wording confirmed by the operator 2026-10-30.
+// If a new operator commitment needs sign-off, wrap it in <Verify>, set
+// verifyPending = true and add the path back to astro.config.mjs's filter.
 import ContentLayout from "../layouts/ContentLayout.astro";
-import Verify from "../components/Verify.astro";
 
 const path = "/privacy/";
 const title = "Privacy Policy";
 const description =
-  "What Dearreels collects through this website and the service, who processes it, and how to ask for a copy or deletion.";
+  "What Dearreels collects through this website, who processes it, and how to ask for access or deletion.";
 const effective = "October 30, 2026";
-const verifyPending = true;
+const verifyPending = false;
+const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? "";
+
+const field =
+  "w-full rounded-md border border-input bg-background px-3 py-2 text-foreground font-normal";
 ---
 <ContentLayout
   title={title}
@@ -39,88 +41,133 @@ const verifyPending = true;
 
     <div class="prose-dr mt-10">
       <p>
-        Dearreels is a <a href="https://lamill.io">lamill.io</a> project. This policy
-        covers the dearreels.com website and the Dearreels service. Questions go to
-        <a href="mailto:hello@lamill.io">hello@lamill.io</a>.
-      </p>
-      <p>
-        <Verify>Who is responsible for this data? No legal entity for lamill.io or Dearreels is recorded in any project repo; the only identity on record is "lamill.io" and hello@lamill.io. Name the company (or person) and its country.</Verify>
+        This page covers the dearreels.com website. Dearreels is a
+        <a href="https://lamill.io">lamill.io</a> project, and the Dearreels
+        service is pre-launch: nothing on this site sends prompts to anyone or
+        stores replies. We'll expand this page before the service launches.
       </p>
 
-      <h2>On this website</h2>
-      <p>
-        <strong>Reading pages.</strong> You can read every page without an account.
-        The site's code runs no analytics or advertising trackers, sets no
-        cookies, and stores nothing in your browser.
-      </p>
-      <p>
-        <strong>Hosting.</strong> The site is served by Cloudflare. Like any web
-        host, Cloudflare processes your IP address and request details to deliver
-        pages, under <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare's privacy policy</a>.
-      </p>
-      <p>
-        <strong>Fonts.</strong> Pages load the Fraunces and Inter typefaces from
-        Google Fonts, so your browser contacts Google's servers, which may log your
-        IP address. See <a href="https://policies.google.com/privacy">Google's privacy policy</a>.
-      </p>
-      <p>
-        <strong>The sign-up form.</strong> The form asks for your name, your email,
-        and, optionally, a few words about the parent you have in mind.
-        <strong>Web3Forms</strong> receives what you submit and forwards it to us by
-        email, under <a href="https://web3forms.com/privacy">Web3Forms' privacy policy</a>.
-        We use it to write back to you about setting up Dearreels.
-      </p>
-
-      <h2>When you use the service</h2>
-      <p>
-        Dearreels sends your parent one question a week on WhatsApp and gathers their
-        replies into a private archive for your family, with a printed transcript book
-        at year-end. To do that, the service handles:
-      </p>
+      <h2>What we collect</h2>
       <ul>
-        <li>Your name and email, and what you tell us about your parent: their name, the language they're most at home in, and what they love to talk about.</li>
-        <li>Your parent's WhatsApp number.</li>
-        <li>Your parent's replies: voice notes, videos, photos and text.</li>
-        <li>The family members you share the archive with, each through their own private link.</li>
-        <li>The delivery address for the printed transcript book.</li>
-        <li>Payment for the yearly plan.</li>
+        <li>
+          <strong>Sign-ups.</strong> The sign-up form asks for your name, your
+          email, and, optionally, a few words about the parent you have in mind.
+        </li>
+        <li>
+          <strong>Privacy requests.</strong> The form on this page asks for your
+          email, the type of request, and a message.
+        </li>
+        <li>
+          <strong>No analytics.</strong> This site runs no analytics or
+          advertising trackers, sets no cookies, and stores nothing in your browser.
+        </li>
       </ul>
-      <p>
-        Messages to and from your parent travel through WhatsApp, which Meta
-        operates under <a href="https://www.whatsapp.com/legal/privacy-policy">its own privacy policy</a>.
-      </p>
-      <p>
-        <Verify>Who processes service data? The service's back end isn't in the code yet: no WhatsApp Business API provider, archive storage, transcription service, payment provider or book printer/shipper is recorded anywhere. List each one, and the country where data is stored.</Verify>
-      </p>
 
-      <h2>Your parent's consent</h2>
-      <p>
-        <Verify>No consent or opt-out flow is described anywhere yet. Proposed wording: "We only send prompts to a parent who has agreed to receive them, and they can stop at any time by replying to say so." Confirm that matches how the service will work, or replace it.</Verify>
-      </p>
+      <h2>Who processes it</h2>
+      <ul>
+        <li>
+          <strong>Cloudflare</strong> hosts the site and handles standard request
+          data, such as IP address and browser type, to deliver pages and block abuse.
+        </li>
+        <li>
+          <strong>Web3Forms</strong> receives form submissions and forwards them
+          to us by email.
+        </li>
+        <li>
+          <strong>Google Fonts</strong> serves the Fraunces and Inter typefaces, so
+          your browser contacts Google's servers, which may log your IP address.
+        </li>
+      </ul>
 
       <h2>How we use it</h2>
       <p>
-        <Verify>Proposed wording: "We use this information only to run the service: to send prompts, build and share the archive, print and ship the book, take payment, and reply to you. We do not sell it, use your family's replies for advertising, or use them to train AI models." Accept, edit or remove each commitment.</Verify>
+        We use form submissions to reply to you and, for sign-ups, to write back
+        about setting up Dearreels for your family. We do not sell personal
+        information or share it for advertising.
       </p>
 
       <h2>Retention and deletion</h2>
       <p>
-        <Verify>No retention period is recorded. Decide how long sign-up emails, replies and archives are kept, including after a subscription ends, and how deletion works.</Verify>
+        We don't keep a database of submissions. Each one arrives as an email in
+        our inbox. Ask and we'll tell you what we have, correct it, or delete it.
       </p>
 
-      <h2>Your requests</h2>
+      <h2>Make a request</h2>
       <p>
-        To ask for a copy of your data, a correction, or deletion, whether for
-        you or for your parent, email <a href="mailto:hello@lamill.io">hello@lamill.io</a>.
+        Use this form for access, correction, deletion, or any other privacy
+        question, or write to <a href="mailto:hello@lamill.io">hello@lamill.io</a>.
       </p>
-      <p>
-        <Verify>Decide whether to commit to a response time, and which regional privacy laws to name. The audience on record (AI_AGENTS.md) is in the US, UK, Canada, the Gulf, Australia and Singapore, with parents in India, but no legal review of which laws apply has been recorded.</Verify>
-      </p>
+    </div>
 
+    <form id="privacy-form" class="mt-6 flex flex-col gap-4" data-key={web3formsKey}>
+      <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off" />
+      <label class="flex flex-col gap-1.5 text-sm font-medium">
+        <span>Email</span>
+        <input type="email" name="email" required autocomplete="email" class={field} />
+      </label>
+      <label class="flex flex-col gap-1.5 text-sm font-medium">
+        <span>Request</span>
+        <select name="request_type" required class={field}>
+          <option value="access">See what you hold about me</option>
+          <option value="correction">Correct my information</option>
+          <option value="deletion">Delete my information</option>
+          <option value="other">Other question</option>
+        </select>
+      </label>
+      <label class="flex flex-col gap-1.5 text-sm font-medium">
+        <span>Message</span>
+        <textarea name="message" rows="4" required class={field}></textarea>
+      </label>
+      <button
+        type="submit"
+        class="self-start rounded-full bg-primary px-5 py-2.5 text-sm text-primary-foreground transition hover:opacity-90 disabled:opacity-60"
+      >
+        Send request
+      </button>
+      <p class="form-status text-sm" role="status" aria-live="polite"></p>
+    </form>
+
+    <div class="prose-dr mt-10">
       <h2>Changes</h2>
-      <p>
-        If this page changes, we'll update the effective date above.
-      </p>
+      <p>If this page changes, the effective date above changes with it.</p>
     </div>
   </article>
 </ContentLayout>
+
+<script>
+  // Posts to Web3Forms; shows success only after the service confirms, and
+  // errors (never fakes success) when the access key is unset.
+  const form = document.getElementById("privacy-form") as HTMLFormElement | null;
+  const status = form?.querySelector(".form-status") as HTMLElement | null;
+  const button = form?.querySelector("button[type=submit]") as HTMLButtonElement | null;
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!status || !button) return;
+    const key = form.dataset.key;
+    if (!key) {
+      status.textContent = "Requests can't be submitted right now. Please write to hello@lamill.io instead.";
+      return;
+    }
+    const data = new FormData(form);
+    data.append("access_key", key);
+    data.append("subject", "Dearreels privacy request");
+    data.append("from_name", "Dearreels privacy form");
+    button.disabled = true;
+    status.textContent = "Sending…";
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", { method: "POST", body: data });
+      const json = await res.json();
+      if (json.success) {
+        form.reset();
+        status.textContent = "Request received. We'll reply by email.";
+      } else {
+        status.textContent = json.message || "Something went wrong. Please try again.";
+      }
+    } catch {
+      status.textContent = "Network error. Please try again in a moment.";
+    } finally {
+      button.disabled = false;
+    }
+  });
+</script>

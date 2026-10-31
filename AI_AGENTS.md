@@ -33,7 +33,7 @@ per-stack work to the central builder at `~/work/projects/builder/`.
 ## Project structure
 
 - `src/` — application source
-- `src/pages/` — `index.astro` (the landing page, owns its own SEO head), `404.astro` (noindex, served with HTTP 404), `questions/index.astro` (hub), `[hub]/[slug].astro` (renders every content entry), `privacy.astro` + `terms.astro` (`[VERIFY]`-gated, noindex until cleared)
+- `src/pages/` — `index.astro` (the landing page, owns its own SEO head), `404.astro` (noindex, served with HTTP 404), `questions/index.astro` (hub), `[hub]/[slug].astro` (renders every content entry), `privacy.astro` (`[VERIFY]`-gated, noindex until cleared)
 - `src/content/{questions,guides,essays}/` — v1 SEO content as markdown; schema in `src/content.config.ts`; plan in `docs/seo-plan.md`
 - `src/layouts/Layout.astro` — shared `<html>` shell with a `head` slot; `ContentLayout.astro` — chrome for content pages
 - `src/components/SeoHead.astro` — shared title/meta/canonical/OG/JSON-LD block

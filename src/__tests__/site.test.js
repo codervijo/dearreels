@@ -49,7 +49,6 @@ describe('built site (dist/)', () => {
       '/guides/storyworth-alternative/',
       '/essays/staying-close-to-parents-far-away/',
       '/privacy/',
-      '/terms/',
     ]) {
       expect(paths).toContain(p);
     }

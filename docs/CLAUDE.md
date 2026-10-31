@@ -64,8 +64,9 @@ uv run portfolio project seo dearreels.com
     `verifyPending` in `astro.config.mjs` (the sitemap filter);
     `site.test.js` fails otherwise. When a page's last marker is cleared,
     set `verifyPending = false` in the page and remove its path from the config.
-    `/privacy/` and `/terms/` are gated this way, and their facts come from
-    the code (see each file's header comment).
+    `/privacy/` (website-only, mspproof.com's pattern; facts come from the
+    code, see its header comment) has no open markers as of 2026-10-30. There is no terms
+    page, by operator decision (2026-10-30), matching mspproof/drdebug.
   - Content honesty: never state facts about Dearreels beyond what the
     landing page/FAQ already claims, and never state competitor facts
     without a dated source (see the Storyworth guide's footnote).

@@ -27,3 +27,9 @@ to surface "last AI prompt" per project. Keep entries append-only.
 
 ## 2026-10-30 — v1.C [VERIFY] pass on privacy/terms
 > Operator: reuse mspproof's Web3Forms key; clarify [VERIFY] without making anything up. Found the key in mspproof.com's public JS bundle. Setting it on the dearreels CF Pages project was blocked by the session's permission classifier, so the operator sets it. Searched sites/, portfolio/ and dearreels genai/: no legal entity, governing law, service back end, consent, renewal or retention policy is recorded. Rewrote both pages so every unmarked line is sourced (code, landing/FAQ, operator); moved Claude-drafted commitments, including a 12-month liability cap that had been stated as fact, into [VERIFY] as proposed wording. Now 13 markers (privacy 6, terms 7). 98 tests passing.
+
+## 2026-10-30 — v1.C privacy rescoped to mspproof's pattern, terms dropped
+> Operator: the 13 markers asked for things no sibling site has (legal entity, governing law); follow the other sites, not calcengine (weak in Google). Rewrote /privacy/ to mspproof.com's website-only pattern (sign-up + request forms, Cloudflare, Web3Forms, Google Fonts, no trackers; service stated as pre-launch) with mspproof's request form and its 2 markers (use/no-sale; retention/deletion). Dropped /terms/ (operator decision; mspproof and drdebug have none) and its footer links. 13 → 2 markers.
+
+## 2026-10-30 — v1.C privacy markers cleared
+> Operator accepted the use/no-sale wording. On retention: "we are not storing anything as of now". Corrected the wording to match what happens: there's no database, but Web3Forms emails each submission to hello@lamill.io; the operator accepted that. verifyPending false, /privacy/ indexable and back in the sitemap.
