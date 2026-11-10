@@ -1,4 +1,5 @@
 ---
+import Analytics from "../components/Analytics.astro";
 // src/layouts/Layout.astro
 // Shared chrome: the <html> shell, global stylesheet, and a `head` slot so
 // each page owns its own SEO/meta tags (kept in the page source for the
@@ -9,6 +10,7 @@ import "../styles/global.css";
 <html lang="en">
   <head>
     <slot name="head" />
+    <Analytics />
   </head>
   <body>
     <slot />
