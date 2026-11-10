@@ -4,8 +4,9 @@
 // Privacy page (PRD v1.C), following mspproof.com's pattern: it covers the
 // website only, because the Dearreels service is pre-launch. Every factual
 // statement is derived from the code: SignupSection.tsx (form fields; posts to
-// Web3Forms), the request form below, global.css (Google-hosted fonts), no
-// analytics/cookies/storage anywhere in src/, Cloudflare Pages hosting.
+// Web3Forms), the request form below, global.css (Google-hosted fonts),
+// src/components/Analytics.astro (Google Analytics 4, added 2026-11-09 by
+// `lamill fleet ga`), Cloudflare Pages hosting.
 // Update this page when any of those change, and expand it when the service
 // launches.
 //
@@ -18,7 +19,7 @@ const path = "/privacy/";
 const title = "Privacy Policy";
 const description =
   "What Dearreels collects through this website, who processes it, and how to ask for access or deletion.";
-const effective = "October 30, 2026";
+const effective = "November 9, 2026";
 const verifyPending = false;
 const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? "";
 
@@ -58,8 +59,10 @@ const field =
           email, the type of request, and a message.
         </li>
         <li>
-          <strong>No analytics.</strong> This site runs no analytics or
-          advertising trackers, sets no cookies, and stores nothing in your browser.
+          <strong>Usage analytics.</strong> This site uses Google Analytics 4 to
+          count visits and see which pages are read. It sets cookies and records
+          the pages you view, your browser and device type, and your approximate
+          location. We run no advertising trackers.
         </li>
       </ul>
 
@@ -72,6 +75,11 @@ const field =
         <li>
           <strong>Web3Forms</strong> receives form submissions and forwards them
           to us by email.
+        </li>
+        <li>
+          <strong>Google Analytics</strong> receives the usage data above. See
+          <a href="https://policies.google.com/technologies/partner-sites">how
+          Google uses data from sites that use its services</a>.
         </li>
         <li>
           <strong>Google Fonts</strong> serves the Fraunces and Inter typefaces, so
